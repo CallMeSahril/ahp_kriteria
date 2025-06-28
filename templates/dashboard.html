@@ -1,0 +1,95 @@
+{% extends 'layout.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<h2>Dashboard Pemantauan AHP</h2>
+<form method="get" class="mb-4 row g-3 align-items-center">
+  <div class="col-auto">
+    <label for="bulan" class="col-form-label">Bulan:</label>
+  </div>
+  <div class="col-auto">
+    <select name="bulan" id="bulan" class="form-select">
+      {% for b in bulan_options %}
+      <option value="{{ b.bulan }}" {% if b.bulan == selected_bulan %}selected{% endif %}>
+        {{ b.bulan }}/{{ b.tahun }}
+      </option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-auto">
+    <label for="tahun" class="col-form-label">Tahun:</label>
+  </div>
+  <div class="col-auto">
+    <select name="tahun" id="tahun" class="form-select">
+      {% set used_years = [] %}
+      {% for b in bulan_options %}
+        {% if b.tahun not in used_years %}
+          <option value="{{ b.tahun }}" {% if b.tahun == selected_tahun %}selected{% endif %}>
+            {{ b.tahun }}
+          </option>
+          {% set _ = used_years.append(b.tahun) %}
+        {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-auto">
+    <button type="submit" class="btn btn-primary">Tampilkan</button>
+  </div>
+</form>
+
+<div class="row mb-4">
+  <div class="col-md-3">
+    <div class="card bg-primary text-white p-3">
+      <h5>Total Upload</h5>
+      <h3>{{ total_upload }}</h3>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-success text-white p-3">
+      <h5>Motif Terbanyak</h5>
+      <h4>{{ motif_terbanyak.nama_motif }}</h4>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-warning text-white p-3">
+      <h5>Skor Rata-Rata Tertinggi</h5>
+      <h4>{{ rata_rata_tertinggi.nama_motif }}</h4>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card bg-secondary text-white p-3">
+      <h5>Upload Terakhir</h5>
+      <p>{{ waktu_terakhir.strftime('%d/%m/%Y %H:%M') if waktu_terakhir else '-' }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="card p-4">
+  <h5 class="mb-4">5 Skor Motif Tertinggi (Terbaru)</h5>
+  <canvas id="barChart" height="100"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('barChart');
+  const barChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ chart_data | map(attribute='nama_motif') | list | tojson }},
+      datasets: [{
+        label: 'Skor Total',
+        data: {{ chart_data | map(attribute='skor_total') | list | tojson }},
+        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block title %}Manajemen Kriteria{% endblock %}
+{% block content %}
+<h2>Daftar Kriteria</h2>
+
+<form method="POST" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="nama" placeholder="Nama Kriteria" class="form-control" required>
+        <button type="submit" class="btn btn-success">Tambah</button>
+    </div>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>#</th>
+            <th>Nama Kriteria</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>
+                <form action="{{ url_for('kriteria.edit_kriteria', id=item.id_kriteria) }}" method="POST" class="d-flex gap-2">
+                    <input type="text" name="nama" value="{{ item.nama_kriteria }}" class="form-control" required>
+                    <button class="btn btn-primary btn-sm">Ubah</button>
+                </form>
+            </td>
+            <td>
+                <a href="{{ url_for('kriteria.hapus_kriteria', id=item.id_kriteria) }}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

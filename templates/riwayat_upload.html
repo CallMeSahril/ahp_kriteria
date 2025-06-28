@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block title %}Riwayat Upload{% endblock %}
+{% block content %}
+<h2>Riwayat Upload Skoring AHP</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Waktu Upload</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in uploads %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ u.waktu_upload.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>
+                <a href="{{ url_for('riwayat.riwayat_detail', upload_id=u.id) }}" class="btn btn-sm btn-info">
+                    Lihat Detail
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

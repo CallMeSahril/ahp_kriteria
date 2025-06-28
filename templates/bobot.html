@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+{% block title %}Bobot Kriteria{% endblock %}
+{% block content %}
+<h2>Bobot Prioritas Kriteria</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Kriteria</th>
+            <th>Bobot</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for nama, bobot in hasil %}
+        <tr>
+            <td>{{ nama }}</td>
+            <td>{{ "%.4f"|format(bobot) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<h4 class="mt-4">Uji Konsistensi</h4>
+<table class="table table-bordered">
+  <tr><th>λ Maksimum</th><td>{{ konsistensi.lambda_max }}</td></tr>
+  <tr><th>CI (Consistency Index)</th><td>{{ konsistensi.CI }}</td></tr>
+  <tr><th>CR (Consistency Ratio)</th><td>{{ konsistensi.CR }}</td></tr>
+  <tr><th>Status</th>
+      <td>
+        <span class="badge {% if konsistensi.status == 'Konsisten' %}bg-success{% else %}bg-danger{% endif %}">
+            {{ konsistensi.status }}
+        </span>
+      </td>
+  </tr>
+</table>
+
+{% endblock %}

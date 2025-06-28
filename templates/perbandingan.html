@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block title %}Perbandingan Kriteria{% endblock %}
+{% block content %}
+<h2>Perbandingan Berpasangan Antar Kriteria</h2>
+
+<form method="POST">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Kriteria 1</th>
+                <th>Kriteria 2</th>
+                <th>Nilai Perbandingan (1–9)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(kriteria|length) %}
+                {% for j in range(i+1, kriteria|length) %}
+                    <tr>
+                        <td>{{ kriteria[i].nama_kriteria }}</td>
+                        <td>{{ kriteria[j].nama_kriteria }}</td>
+                        <td>
+                            <input type="number" step="0.01" min="1" max="9" class="form-control"
+                                   name="pair_{{ kriteria[i].id_kriteria }}_{{ kriteria[j].id_kriteria }}" required>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <button class="btn btn-success">Simpan</button>
+</form>
+{% endblock %}

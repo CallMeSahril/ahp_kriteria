@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% block title %}Upload Data Pemesanan Kain{% endblock %}
+
+{% block content %}
+<h2>Upload Data Pemesanan Kain</h2>
+
+<!-- Tombol Download Template -->
+<div class="mb-3">
+    <a href="{{ url_for('upload_pesanan.download_template_pesanan') }}" class="btn btn-secondary">
+        Download Template Excel
+    </a>
+</div>
+
+<!-- Form Upload Excel -->
+<form method="POST" enctype="multipart/form-data" class="mb-4">
+    <div class="input-group">
+        <input type="file" name="file" class="form-control" required>
+        <button type="submit" class="btn btn-primary">Upload & Hitung</button>
+    </div>
+</form>
+
+<!-- Menampilkan Hasil -->
+{% if hasil %}
+<h4>Hasil Skoring AHP Berdasarkan Data Pesanan</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ranking</th>
+            <th>Nama Motif / Bahan</th>
+            <th>Jenis Bahan</th>
+            <th>Keunikan Motif</th>
+            <th>Kombinasi Warna</th>
+            <th>Tren Pasar</th>
+            <th>Skor AHP</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in hasil %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ item.nama_motif }}</td>
+            <td>{{ item.kualitas }}</td>
+            <td>{{ item.keunikan }}</td>
+            <td>{{ item.kombinasi }}</td>
+            <td>{{ item.tren }}</td>
+            <td><strong>{{ "%.4f"|format(item.skor) }}</strong></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

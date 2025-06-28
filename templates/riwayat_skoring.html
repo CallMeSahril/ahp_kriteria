@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% block title %}Riwayat Skoring AHP{% endblock %}
+{% block content %}
+
+<h2>Riwayat Hasil Skoring AHP</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nama Motif</th>
+            <th>Kualitas</th>
+            <th>Keunikan</th>
+            <th>Kombinasi Warna</th>
+            <th>Tren Pasar</th>
+            <th>Skor AHP</th>
+            <th>Tanggal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in hasil %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ row.nama_motif }}</td>
+            <td>{{ row.kualitas_bahan }}</td>
+            <td>{{ row.keunikan_motif }}</td>
+            <td>{{ row.kombinasi_warna }}</td>
+            <td>{{ row.tren_pasar }}</td>
+            <td><strong>{{ "%.4f"|format(row.skor_total) }}</strong></td>
+            <td>{{ row.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

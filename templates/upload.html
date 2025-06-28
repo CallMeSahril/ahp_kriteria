@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block title %}Upload Data Motif{% endblock %}
+{% block content %}
+<div class="mb-3">
+    <a href="{{ url_for('upload.download_template') }}" class="btn btn-secondary">
+        Download Template Excel
+    </a>
+</div>
+
+<h2>Upload Excel Data Motif Kain</h2>
+
+<form method="POST" enctype="multipart/form-data" class="mb-4">
+    <div class="input-group">
+        <input type="file" name="file" class="form-control" required>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </div>
+</form>
+
+{% if hasil %}
+<h4>Hasil Skoring Berdasarkan Bobot AHP</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Ranking</th>
+            <th>Nama Motif</th>
+            <th>Skor</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in hasil %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ item.nama_motif }}</td>
+            <td>{{ item.skor }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

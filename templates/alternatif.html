@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block title %}Manajemen Alternatif{% endblock %}
+{% block content %}
+<h2>Daftar Alternatif</h2>
+
+<form method="POST" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="nama" placeholder="Nama Alternatif" class="form-control" required>
+        <button type="submit" class="btn btn-success">Tambah</button>
+    </div>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>#</th>
+            <th>Nama Alternatif</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>
+                <form action="{{ url_for('alternatif.edit_alternatif', id=item.id_alternatif) }}" method="POST" class="d-flex gap-2">
+                    <input type="text" name="nama" value="{{ item.nama_alternatif }}" class="form-control" required>
+                    <button class="btn btn-primary btn-sm">Ubah</button>
+                </form>
+            </td>
+            <td>
+                <a href="{{ url_for('alternatif.hapus_alternatif', id=item.id_alternatif) }}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
