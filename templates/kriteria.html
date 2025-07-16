@@ -2,6 +2,11 @@
 {% block title %}Manajemen Kriteria{% endblock %}
 {% block content %}
 <h2>Daftar Kriteria</h2>
+<div class="mb-3">
+    <a href="{{ url_for('kriteria.print_kriteria_pdf') }}" class="btn btn-danger" target="_blank">
+        <i class="fas fa-file-pdf"></i> Cetak PDF
+    </a>
+</div>
 
 <form method="POST" class="mb-4">
     <div class="input-group">
@@ -23,14 +28,15 @@
         <tr>
             <td>{{ loop.index }}</td>
             <td>
-                <form action="{{ url_for('kriteria.edit_kriteria', id=item.id_kriteria) }}" method="POST" class="d-flex gap-2">
+                <form action="{{ url_for('kriteria.edit_kriteria', id=item.id_kriteria) }}" method="POST"
+                    class="d-flex gap-2">
                     <input type="text" name="nama" value="{{ item.nama_kriteria }}" class="form-control" required>
                     <button class="btn btn-primary btn-sm">Ubah</button>
                 </form>
             </td>
             <td>
                 <a href="{{ url_for('kriteria.hapus_kriteria', id=item.id_kriteria) }}" class="btn btn-danger btn-sm"
-                   onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
+                    onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
             </td>
         </tr>
         {% endfor %}

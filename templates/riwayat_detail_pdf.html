@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Riwayat Skoring AHP</title>
+
+    <style>
+        @page {
+            size: A4;
+            margin: 2.5cm 2cm 2.5cm 2cm;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11pt;
+            color: #000;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            padding: 6px;
+            text-align: left;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Laporan Skoring AHP<br>
+        {% if filter_bulan and filter_tahun %}
+        Periode: {{ filter_bulan }}/{{ filter_tahun }}
+        {% else %}
+        Upload ID: {{ upload_id }}
+        {% endif %}
+    </h2>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama Motif</th>
+                <th>Kualitas</th>
+                <th>Keunikan</th>
+                <th>Kombinasi Warna</th>
+                <th>Tren Pasar</th>
+                <th>Skor AHP</th>
+                <th>Tanggal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in hasil %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row.nama_motif }}</td>
+                <td>{{ row.kualitas_bahan }}</td>
+                <td>{{ row.keunikan_motif }}</td>
+                <td>{{ row.kombinasi_warna }}</td>
+                <td>{{ row.tren_pasar }}</td>
+                <td><strong>{{ "%.4f"|format(row.skor_total) }}</strong></td>
+                <td>{{ row.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <p>Dicetak: {{ now.strftime('%d/%m/%Y %H:%M') }}</p>
+        <p>__________________________</p>
+        <p><strong>Admin</strong></p>
+    </div>
+
+</body>
+
+</html>

@@ -3,7 +3,10 @@
 {% block content %}
 
 <h2>Riwayat Hasil Skoring AHP</h2>
-
+<a href="{{ url_for('riwayat.riwayat_detail_pdf', upload_id=hasil[0].upload_id) }}" class="btn btn-danger mb-3"
+    target="_blank">
+    <i class="fas fa-file-pdf"></i> Cetak PDF
+</a>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>

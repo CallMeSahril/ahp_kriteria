@@ -1,32 +1,88 @@
 {% extends 'layout.html' %}
-{% block title %}Perbandingan Kriteria{% endblock %}
+{% block title %}Edit Matriks AHP{% endblock %}
 {% block content %}
-<h2>Perbandingan Berpasangan Antar Kriteria</h2>
 
-<form method="POST">
-    <table class="table table-bordered">
-        <thead>
+<h2 class="mb-4">Edit Matriks Perbandingan Berpasangan AHP</h2>
+<div class="mb-4">
+    <h5>Keterangan Skala Perbandingan (Saaty Scale)</h5>
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
             <tr>
-                <th>Kriteria 1</th>
-                <th>Kriteria 2</th>
-                <th>Nilai Perbandingan (1–9)</th>
+                <th width="10%">Nilai</th>
+                <th>Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td>Kedua elemen sama penting</td></tr>
+            <tr><td>2</td><td>Nilai antara dua nilai yang berdekatan</td></tr>
+            <tr><td>3</td><td>Elemen sedikit lebih penting dari yang lain</td></tr>
+            <tr><td>4</td><td>Nilai antara dua nilai yang berdekatan</td></tr>
+            <tr><td>5</td><td>Elemen jelas lebih penting dari yang lain</td></tr>
+            <tr><td>6</td><td>Nilai antara dua nilai yang berdekatan</td></tr>
+            <tr><td>7</td><td>Elemen sangat jelas lebih penting dari yang lain</td></tr>
+            <tr><td>8</td><td>Nilai antara dua nilai yang berdekatan</td></tr>
+            <tr><td>9</td><td>Elemen mutlak lebih penting dari yang lain</td></tr>
+        </tbody>
+    </table>
+</div>
+<form method="POST">
+    <table class="table table-bordered text-center align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Kriteria</th>
+                {% for k in kriteria %}
+                    <th>{{ k.nama_kriteria }}</th>
+                {% endfor %}
             </tr>
         </thead>
         <tbody>
             {% for i in range(kriteria|length) %}
-                {% for j in range(i+1, kriteria|length) %}
-                    <tr>
-                        <td>{{ kriteria[i].nama_kriteria }}</td>
-                        <td>{{ kriteria[j].nama_kriteria }}</td>
-                        <td>
-                            <input type="number" step="0.01" min="1" max="9" class="form-control"
-                                   name="pair_{{ kriteria[i].id_kriteria }}_{{ kriteria[j].id_kriteria }}" required>
-                        </td>
-                    </tr>
+            <tr>
+                <th class="table-light">{{ kriteria[i].nama_kriteria }}</th>
+                {% for j in range(kriteria|length) %}
+                <td>
+                    {% if i == j %}
+                        1
+                    {% elif i < j %}
+                        <input type="number" step="0.01" min="1" max="9"
+                            class="form-control"
+                            name="pair_{{ kriteria[i].id_kriteria }}_{{ kriteria[j].id_kriteria }}"
+                            value="{{ matrix[kriteria[i].id_kriteria][kriteria[j].id_kriteria]|round(4) if matrix[kriteria[i].id_kriteria][kriteria[j].id_kriteria] else '' }}"
+                            required>
+                    {% else %}
+                        <span id="inverse_{{ kriteria[i].id_kriteria }}_{{ kriteria[j].id_kriteria }}">
+                            {{ "%.4f"|format(matrix[kriteria[i].id_kriteria][kriteria[j].id_kriteria]) if matrix[kriteria[i].id_kriteria][kriteria[j].id_kriteria] else '-' }}
+                        </span>
+                    {% endif %}
+                </td>
                 {% endfor %}
+            </tr>
             {% endfor %}
         </tbody>
     </table>
-    <button class="btn btn-success">Simpan</button>
+
+    <button type="submit" class="btn btn-success mt-3">Simpan</button>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const inputs = document.querySelectorAll('input[name^="pair_"]');
+    inputs.forEach(input => {
+        input.addEventListener('input', function () {
+            const [_, k1, k2] = input.name.split('_');
+            const inverseId = `inverse_${k2}_${k1}`;
+            const inverseSpan = document.getElementById(inverseId);
+            if (inverseSpan) {
+                const value = parseFloat(input.value);
+                if (!isNaN(value) && value !== 0) {
+                    inverseSpan.textContent = (1 / value).toFixed(4);
+                } else {
+                    inverseSpan.textContent = '-';
+                }
+            }
+        });
+    });
+});
+</script>
+
 {% endblock %}

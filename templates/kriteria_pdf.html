@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Laporan Kriteria</title>
+  <style>
+    @page { size: A4; margin: 2cm; }
+    body { font-family: Arial, sans-serif; font-size: 12pt; color: #000; }
+    h1 { text-align: center; font-size: 18pt; margin-bottom: 10px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 8px;
+      text-align: left;
+    }
+    .footer {
+      margin-top: 60px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Daftar Kriteria</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>No</th>
+      <th>Nama Kriteria</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in data %}
+    <tr>
+      <td>{{ item.id_kriteria }}</td>
+      <td>{{ item.nama_kriteria }}</td>  <!-- ✅ pakai key ini -->
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+<div class="footer">
+  <p>Dicetak pada: {{ now.strftime('%d/%m/%Y %H:%M') }}</p>
+  <p>__________________________</p>
+  <p><strong>Admin</strong></p>
+</div>
+
+</body>
+</html>

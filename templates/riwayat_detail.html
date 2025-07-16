@@ -4,7 +4,10 @@
 <h2>Detail Skoring AHP - Upload ID {{ hasil[0].upload_id if hasil else '-' }}</h2>
 
 <a href="{{ url_for('riwayat.riwayat_skoring') }}" class="btn btn-secondary mb-3">← Kembali</a>
-
+<a href="{{ url_for('riwayat.riwayat_detail_pdf', upload_id=hasil[0].upload_id) }}" class="btn btn-danger mb-3"
+    target="_blank">
+    <i class="fas fa-file-pdf"></i> Cetak PDF
+</a>
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
