@@ -22,4 +22,4 @@ app.register_blueprint(riwayat_bp)
 app.register_blueprint(dashboard_bp)
 
 if __name__ == '__main__':
-    app.run(port="5020", debug=True)
+    app.run(host="0.0.0.0", port="5020", debug=True)
