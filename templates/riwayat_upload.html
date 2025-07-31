@@ -14,7 +14,7 @@
         {% for u in uploads %}
         <tr>
             <td>{{ loop.index }}</td>
-            <td>{{ u.waktu_upload.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>{{ u.waktu_upload.strftime('%m/%Y') }}</td>
             <td>
                 <a href="{{ url_for('riwayat.riwayat_detail', upload_id=u.id) }}" class="btn btn-sm btn-info">
                     Lihat Detail

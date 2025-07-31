@@ -70,6 +70,15 @@ def upload_pesanan():
             df = pd.read_excel(filepath)
             df.fillna('', inplace=True)
 
+            # Konversi Jml. Pcs ke numerik
+            df['Jml. Pcs'] = pd.to_numeric(df['Jml. Pcs'], errors='coerce')
+
+            # Hapus baris yang Jml. Pcs-nya tidak valid (misalnya kosong, "-")
+            df = df.dropna(subset=['Jml. Pcs'])
+
+            # Pastikan bertipe float
+            df['Jml. Pcs'] = df['Jml. Pcs'].astype(float)
+
             # Filter baris tanpa "Kode Dsg."
             df = df[~df['Kode Dsg.'].isin(['', '-', None])]
 

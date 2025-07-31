@@ -107,6 +107,10 @@
 <!-- === Chart.js === -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+  const monthNames = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+  ];
   // Bar Chart existing
   const labels = {{ chart_data | map(attribute = 'nama_motif') | list | tojson }};
   const scores = {{ chart_data | map(attribute = 'skor_total') | list | tojson }};
@@ -126,13 +130,18 @@
   });
 
   // Line Chart: rata-rata skor_total per bulan (penjualan per bulan)
-  const lineLabels = {{ penjualan_per_bulan | map(attribute = 'bulan') | list | tojson }};
-  const lineData = {{ penjualan_per_bulan | map(attribute = 'rata_rata_skor') | list | tojson }};
+
+
+  const lineLabelsRaw = {{ penjualan_per_bulan | tojson }};
+  const lineLabels = lineLabelsRaw.map(item => {
+    return monthNames[item.bulan - 1] + ' ' + item.tahun;
+  });
+  const lineData = lineLabelsRaw.map(item => item.rata_rata_skor);
 
   new Chart(document.getElementById('lineChart'), {
     type: 'line',
     data: {
-      labels: lineLabels.map(bulan => 'Bulan ' + bulan),
+      labels: lineLabels,
       datasets: [{
         label: 'Rata-rata Skor Total per Bulan',
         data: lineData,
@@ -141,7 +150,14 @@
         tension: 0.3
       }]
     },
-    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
   });
   const pieLabels = {{ distribusi_warna | map(attribute = 'warna') | list | tojson }};
   const pieData = {{ distribusi_warna | map(attribute = 'jumlah') | list | tojson }};
