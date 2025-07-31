@@ -16,35 +16,40 @@ def allowed_file(filename):
 
 
 def bahan_to_quality(bahan_nama):
-    bahan_nama = (bahan_nama or '').lower()
-    if 'stretch' in bahan_nama:
+    bahan_nama = (bahan_nama or '').strip().lower()
+
+    # Stretch dan Ceruty langsung nilai 9
+    if 'stretch' in bahan_nama or 'ceruty' in bahan_nama:
         return 9
-    elif 'ceruty' in bahan_nama:
-        return 9
-    elif 'cringkle' in bahan_nama:
+
+    # Crinkle / Kringkle / Krinkel
+    if any(x in bahan_nama for x in ['crinkle', 'kringkle', 'krinkel']):
         if 'dobby' in bahan_nama:
             return 9
         elif 'wavy' in bahan_nama:
             return 7
         elif 'airflow' in bahan_nama:
             return 5
-    elif 'rayon' in bahan_nama:
+        else:
+            return 6  # default crinkle tanpa subtipe
+
+    # Rayon
+    if 'rayon' in bahan_nama:
         if 'silky' in bahan_nama or 'twill' in bahan_nama:
             return 9
         elif 'super' in bahan_nama:
             return 7
         elif 'biasa' in bahan_nama:
             return 5
-    elif 'poplin' in bahan_nama:
+        else:
+            return 6  # default rayon tanpa subtipe
+
+    # Jenis lain yang langsung nilai 9
+    if any(x in bahan_nama for x in ['poplin', 'jaquard silk', 'maxmara', 'saten']):
         return 9
-    elif 'jaquard silk' in bahan_nama:
-        return 9
-    elif 'maxmara' in bahan_nama:
-        return 9
-    elif 'saten' in bahan_nama:
-        return 9
-    else:
-        return 5
+
+    # Default jika tidak cocok semua
+    return 5
 
 
 @upload_bp.route('/upload/pesanan', methods=['GET', 'POST'])
