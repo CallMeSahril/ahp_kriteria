@@ -1,6 +1,6 @@
 from io import BytesIO
 from weasyprint import HTML
-from flask import make_response, Blueprint, render_template, request
+from flask import make_response, Blueprint, render_template, request, session, redirect, url_for
 from db import get_connection
 from datetime import datetime
 
@@ -9,6 +9,8 @@ dashboard_bp = Blueprint('dashboard', __name__)
 
 @dashboard_bp.route('/', methods=['GET'])
 def dashboard():
+    if 'user' not in session:
+        return redirect(url_for('auth.login'))
     filter_bulan = request.args.get('filter_bulan')
     selected_bulan = request.args.get('bulan')
     selected_tahun = request.args.get('tahun')
@@ -127,10 +129,12 @@ def dashboard():
     penjualan_per_bulan = cursor.fetchall()
 
     # Pie chart: distribusi warna
+# Pie chart: distribusi warna (khusus 1CW - 5CW saja)
     cursor.execute(f"""
         SELECT warna, COUNT(*) AS jumlah
         FROM hasil_skoring
         WHERE upload_id IN ({placeholders})
+        AND warna REGEXP '^[1-5]CW$'
         GROUP BY warna
         ORDER BY jumlah DESC
     """, params)
@@ -252,6 +256,7 @@ def export_pdf():
         SELECT warna, COUNT(*) AS jumlah
         FROM hasil_skoring
         WHERE upload_id IN ({placeholders})
+        AND warna REGEXP '^[1-5]CW$'
         GROUP BY warna
         ORDER BY jumlah DESC
     """, params)

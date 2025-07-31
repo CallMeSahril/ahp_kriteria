@@ -23,14 +23,15 @@
         <tr>
             <td>{{ loop.index }}</td>
             <td>
-                <form action="{{ url_for('alternatif.edit_alternatif', id=item.id_alternatif) }}" method="POST" class="d-flex gap-2">
+                <form action="{{ url_for('alternatif.edit_alternatif', id=item.id_alternatif) }}" method="POST"
+                    class="d-flex gap-2">
                     <input type="text" name="nama" value="{{ item.nama_alternatif }}" class="form-control" required>
                     <button class="btn btn-primary btn-sm">Ubah</button>
                 </form>
             </td>
             <td>
-                <a href="{{ url_for('alternatif.hapus_alternatif', id=item.id_alternatif) }}" class="btn btn-danger btn-sm"
-                   onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
+                <a href="{{ url_for('alternatif.hapus_alternatif', id=item.id_alternatif) }}"
+                    class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
             </td>
         </tr>
         {% endfor %}

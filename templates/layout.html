@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,16 +11,19 @@
     body {
       overflow-x: hidden;
     }
+
     #wrapper {
       display: flex;
       flex-wrap: nowrap;
     }
+
     #sidebar-wrapper {
       min-height: 100vh;
       width: 250px;
       background-color: #343a40;
       transition: all 0.3s;
     }
+
     #sidebar-wrapper .sidebar-heading {
       font-size: 1.5rem;
       padding: 1rem;
@@ -27,6 +31,7 @@
       color: white;
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
+
     .sidebar-link {
       text-decoration: none;
       color: #fff;
@@ -34,6 +39,7 @@
       padding: 10px 20px;
       transition: background-color 0.2s ease;
     }
+
     .sidebar-link:hover {
       background-color: #495057;
     }
@@ -46,68 +52,76 @@
         top: 0;
         z-index: 1031;
       }
+
       #sidebar-wrapper.active {
         left: 0;
       }
+
       #overlay {
         position: fixed;
         top: 0;
         left: 0;
         height: 100%;
         width: 100%;
-        background-color: rgba(0,0,0,0.5);
+        background-color: rgba(0, 0, 0, 0.5);
         z-index: 1030;
         display: none;
       }
+
       #overlay.active {
         display: block;
       }
     }
   </style>
 </head>
+
 <body>
 
-<!-- Overlay for mobile -->
-<div id="overlay" onclick="toggleSidebar()"></div>
+  <!-- Overlay for mobile -->
+  <div id="overlay" onclick="toggleSidebar()"></div>
 
-<!-- Wrapper for sidebar and content -->
-<div id="wrapper">
-  <!-- Sidebar -->
-  <div class="bg-dark text-white" id="sidebar-wrapper">
-    <div class="sidebar-heading">☰ AHP Panel</div>
-    <ul class="list-unstyled mb-0">
-      <li><a href="{{ url_for('dashboard.dashboard') }}" class="sidebar-link">Dashboard</a></li>
-      <li><a href="{{ url_for('kriteria.list_kriteria') }}" class="sidebar-link">Kriteria</a></li>
-      <li><a href="{{ url_for('alternatif.list_alternatif') }}" class="sidebar-link">Alternatif</a></li>
-      <li><a href="{{ url_for('perbandingan.input_perbandingan') }}" class="sidebar-link">Perbandingan Kriteria</a></li>
-      <li><a href="{{ url_for('perhitungan.tampil_bobot') }}" class="sidebar-link">Hitung Bobot</a></li>
-      <li><a href="{{ url_for('upload_pesanan.upload_pesanan') }}" class="sidebar-link">Upload Data Pesanan</a></li>
-      <li><a href="{{ url_for('riwayat.riwayat_skoring') }}" class="sidebar-link">Riwayat Skoring</a></li>
-    </ul>
-  </div>
+  <!-- Wrapper for sidebar and content -->
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <div class="bg-dark text-white" id="sidebar-wrapper">
+      <div class="sidebar-heading">☰ AHP Panel</div>
+      <ul class="list-unstyled mb-0">
+        <li><a href="{{ url_for('dashboard.dashboard') }}" class="sidebar-link">Dashboard</a></li>
+        <li><a href="{{ url_for('kriteria.list_kriteria') }}" class="sidebar-link">Kriteria</a></li>
+        <li><a href="{{ url_for('alternatif.list_alternatif') }}" class="sidebar-link">Alternatif</a></li>
+        <li><a href="{{ url_for('perbandingan.input_perbandingan') }}" class="sidebar-link">Perbandingan Kriteria</a>
+        </li>
+        <li><a href="{{ url_for('perhitungan.tampil_bobot') }}" class="sidebar-link">Hitung Bobot</a></li>
+        <li><a href="{{ url_for('upload_pesanan.upload_pesanan') }}" class="sidebar-link">Upload Data Pesanan</a></li>
+        <li><a href="{{ url_for('riwayat.riwayat_skoring') }}" class="sidebar-link">Riwayat Skoring</a></li>
+        <li><a href="{{ url_for('auth.logout') }}" class="sidebar-link text-danger">Logout</a></li>
 
-  <!-- Page content -->
-  <div id="page-content-wrapper" class="flex-grow-1">
-    <!-- Top bar for mobile -->
-    <nav class="navbar navbar-dark bg-dark d-md-none">
-      <div class="container-fluid">
-        <button class="btn btn-outline-light" onclick="toggleSidebar()">☰</button>
-        <span class="navbar-brand ms-2">AHP Panel</span>
+      </ul>
+    </div>
+
+    <!-- Page content -->
+    <div id="page-content-wrapper" class="flex-grow-1">
+      <!-- Top bar for mobile -->
+      <nav class="navbar navbar-dark bg-dark d-md-none">
+        <div class="container-fluid">
+          <button class="btn btn-outline-light" onclick="toggleSidebar()">☰</button>
+          <span class="navbar-brand ms-2">AHP Panel</span>
+        </div>
+      </nav>
+
+      <!-- Main content -->
+      <div class="container-fluid p-4">
+        {% block content %}{% endblock %}
       </div>
-    </nav>
-
-    <!-- Main content -->
-    <div class="container-fluid p-4">
-      {% block content %}{% endblock %}
     </div>
   </div>
-</div>
 
-<script>
-  function toggleSidebar() {
-    document.getElementById('sidebar-wrapper').classList.toggle('active');
-    document.getElementById('overlay').classList.toggle('active');
-  }
-</script>
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar-wrapper').classList.toggle('active');
+      document.getElementById('overlay').classList.toggle('active');
+    }
+  </script>
 </body>
+
 </html>
