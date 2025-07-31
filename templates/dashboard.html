@@ -84,7 +84,7 @@
   <div class="col-md-3">
     <div class="card bg-secondary text-white p-3">
       <h5>Upload Terakhir</h5>
-      <p>{{ waktu_terakhir.strftime('%d/%m/%Y %H:%M') if waktu_terakhir else '-' }}</p>
+      <p>{{ waktu_terakhir.strftime('%d/%m/%Y ') if waktu_terakhir else '-' }}</p>
     </div>
   </div>
 </div>
@@ -101,7 +101,7 @@
 
 <div class="card p-4 mb-5">
   <h5 class="mb-4">Distribusi Skor Total (Pie Chart)</h5>
-  <canvas id="pieChart" height="100"></canvas>
+  <canvas id="pieChart" width="300" height="300" style="max-width: 300px; margin: auto;"></canvas>
 </div>
 
 <!-- === Chart.js === -->
