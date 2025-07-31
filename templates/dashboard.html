@@ -7,7 +7,6 @@
   <a href="{{ url_for('dashboard.export_pdf', bulan=selected_bulan, tahun=selected_tahun) }}" class="btn btn-danger">
     <i class="fas fa-file-pdf"></i> Ekspor PDF Langsung
   </a>
-
 </div>
 
 <form method="get" class="mb-4 row g-3 align-items-center">
@@ -71,31 +70,87 @@
   </div>
 </div>
 
-<div class="card p-4">
+<div class="card p-4 mb-5">
   <h5 class="mb-4">5 Skor Motif Tertinggi (Terbaru)</h5>
   <canvas id="barChart" height="100"></canvas>
 </div>
 
+<div class="card p-4 mb-5">
+  <h5 class="mb-4">Trend Skor Total (Line Chart)</h5>
+  <canvas id="lineChart" height="100"></canvas>
+</div>
+
+<div class="card p-4 mb-5">
+  <h5 class="mb-4">Distribusi Skor Total (Pie Chart)</h5>
+  <canvas id="pieChart" height="100"></canvas>
+</div>
+
+<!-- === Chart.js === -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  const ctx = document.getElementById('barChart');
-  const barChart = new Chart(ctx, {
+  // Bar Chart existing
+  const labels = {{ chart_data | map(attribute = 'nama_motif') | list | tojson }};
+  const scores = {{ chart_data | map(attribute = 'skor_total') | list | tojson }};
+
+  new Chart(document.getElementById('barChart'), {
     type: 'bar',
     data: {
-      labels: {{ chart_data | map(attribute = 'nama_motif') | list | tojson }},
-  datasets: [{
-    label: 'Skor Total',
-    data: {{ chart_data | map(attribute = 'skor_total') | list | tojson }},
-    backgroundColor: 'rgba(54, 162, 235, 0.7)',
-    borderWidth: 1
+      labels: labels,
+      datasets: [{
+        label: 'Skor Total',
+        data: scores,
+        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+        borderWidth: 1
       }]
     },
-  options: {
-    responsive: true,
-      scales: {
-      y: { beginAtZero: true }
-    }
-  }
+    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+  });
+
+  // Line Chart: rata-rata skor_total per bulan (penjualan per bulan)
+  const lineLabels = {{ penjualan_per_bulan | map(attribute = 'bulan') | list | tojson }};
+  const lineData = {{ penjualan_per_bulan | map(attribute = 'rata_rata_skor') | list | tojson }};
+
+  new Chart(document.getElementById('lineChart'), {
+    type: 'line',
+    data: {
+      labels: lineLabels.map(bulan => 'Bulan ' + bulan),
+      datasets: [{
+        label: 'Rata-rata Skor Total per Bulan',
+        data: lineData,
+        fill: false,
+        borderColor: 'rgba(75, 192, 192, 1)',
+        tension: 0.3
+      }]
+    },
+    options: { responsive: true, scales: { y: { beginAtZero: true } } }
+  });
+
+  // Pie Chart: distribusi nama_motif per bulan
+  const pieLabels = {{ distribusi_warna | map(attribute = 'nama_motif') | list | tojson }};
+  const pieData = {{ distribusi_warna | map(attribute = 'jumlah') | list | tojson }};
+
+  const pieColors = [
+    'rgba(255, 99, 132, 0.7)',
+    'rgba(54, 162, 235, 0.7)',
+    'rgba(255, 206, 86, 0.7)',
+    'rgba(75, 192, 192, 0.7)',
+    'rgba(153, 102, 255, 0.7)',
+    'rgba(255, 159, 64, 0.7)'
+  ];
+
+  new Chart(document.getElementById('pieChart'), {
+    type: 'pie',
+    data: {
+      labels: pieLabels,
+      datasets: [{
+        label: 'Distribusi Motif',
+        data: pieData,
+        backgroundColor: pieColors,
+        borderColor: '#fff',
+        borderWidth: 1
+      }]
+    },
+    options: { responsive: true }
   });
 </script>
 
