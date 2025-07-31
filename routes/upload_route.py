@@ -4,6 +4,7 @@ import pandas as pd
 from flask import Blueprint, request, render_template, flash, send_file
 from werkzeug.utils import secure_filename
 from db import get_connection
+from datetime import datetime
 
 upload_bp = Blueprint('upload_pesanan', __name__)
 UPLOAD_FOLDER = 'uploads'
@@ -80,8 +81,11 @@ def upload_pesanan():
             cursor = conn.cursor(dictionary=True)
 
             # Tambahkan sesi upload dengan bulan dan tahun
+            waktu_upload = datetime(
+                tahun, bulan, 1).strftime('%Y-%m-%d %H:%M:%S')
+
             cursor.execute(
-                "INSERT INTO hasil_upload (bulan, tahun) VALUES (%s, %s)", (bulan, tahun))
+                "INSERT INTO hasil_upload (waktu_upload) VALUES (%s)", (waktu_upload,))
             upload_id = cursor.lastrowid
 
             # Ambil bobot AHP
