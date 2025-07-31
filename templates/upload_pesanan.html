@@ -11,18 +11,44 @@
     </a>
 </div>
 
-<!-- Form Upload Excel -->
+<!-- Form Upload Excel + Input Bulan & Tahun -->
 <form method="POST" enctype="multipart/form-data" class="mb-4">
-    <div class="input-group">
-        <input type="file" name="file" class="form-control" required>
-        <button type="submit" class="btn btn-primary">Upload & Hitung</button>
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label for="bulan" class="form-label">Bulan</label>
+            <select name="bulan" id="bulan" class="form-select" required>
+                <option value="">-- Pilih Bulan --</option>
+                {% for i in range(1, 13) %}
+                <option value="{{ i }}" {% if request.form.get('bulan', '' )==i|string %}selected{% endif %}>
+                    {{
+                    ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"][i-1]
+                    }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="tahun" class="form-label">Tahun</label>
+            <input type="number" name="tahun" id="tahun" class="form-control" required
+                value="{{ request.form.get('tahun', '') }}">
+        </div>
+
+    </div>
+    <div class="col-md-6">
+        <label class="form-label d-block">Upload File</label>
+        <div class="input-group">
+            <input type="file" name="file" class="form-control" required>
+            <button type="submit" class="btn btn-primary">Upload & Hitung</button>
+        </div>
     </div>
 </form>
 
-<!-- Menampilkan Hasil -->
+<!-- Menampilkan Hasil Skoring -->
 {% if hasil %}
 <h4>Hasil Skoring AHP Berdasarkan Data Pesanan</h4>
-<table class="table table-bordered">
+<p><strong>Bulan:</strong> {{ bulan }} / <strong>Tahun:</strong> {{ tahun }}</p>
+
+<table class="table table-bordered mt-3">
     <thead>
         <tr>
             <th>Ranking</th>

@@ -8,39 +8,58 @@
     <i class="fas fa-file-pdf"></i> Ekspor PDF Langsung
   </a>
 </div>
-
 <form method="get" class="mb-4 row g-3 align-items-center">
+
+  <!-- Checkbox filter bulan -->
+  <div class="col-auto d-flex align-items-center">
+    <input class="form-check-input me-2" type="checkbox" name="filter_bulan" id="filter_bulan" {% if
+      request.args.get('filter_bulan') %}checked{% endif %}>
+    <label class="form-check-label mb-0" for="filter_bulan">
+      Filter Bulan & Tahun
+    </label>
+  </div>
+
+  <!-- Dropdown Bulan -->
   <div class="col-auto">
-    <label for="bulan" class="col-form-label">Bulan:</label>
+    <label for="bulan" class="col-form-label fw-semibold">Bulan:</label>
   </div>
   <div class="col-auto">
-    <select name="bulan" id="bulan" class="form-select">
+    <select name="bulan" id="bulan" class="form-select" {% if not request.args.get('filter_bulan') %}disabled{% endif
+      %}>
+      {% set month_names =
+      ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember']
+      %}
       {% for b in bulan_options %}
       <option value="{{ b.bulan }}" {% if b.bulan==selected_bulan %}selected{% endif %}>
-        {{ b.bulan }}/{{ b.tahun }}
+        {{ month_names[b.bulan - 1] }} {{ b.tahun }}
       </option>
       {% endfor %}
     </select>
   </div>
+
+  <!-- Dropdown Tahun -->
   <div class="col-auto">
-    <label for="tahun" class="col-form-label">Tahun:</label>
+    <label for="tahun" class="col-form-label fw-semibold">Tahun:</label>
   </div>
   <div class="col-auto">
     <select name="tahun" id="tahun" class="form-select">
       {% set used_years = [] %}
       {% for b in bulan_options %}
       {% if b.tahun not in used_years %}
-      <option value="{{ b.tahun }}" {% if b.tahun==selected_tahun %}selected{% endif %}>
-        {{ b.tahun }}
-      </option>
+      <option value="{{ b.tahun }}" {% if b.tahun==selected_tahun %}selected{% endif %}>{{ b.tahun }}</option>
       {% set _ = used_years.append(b.tahun) %}
       {% endif %}
       {% endfor %}
     </select>
   </div>
+
+  <!-- Tombol Submit -->
   <div class="col-auto">
-    <button type="submit" class="btn btn-primary">Tampilkan</button>
+    <button type="submit" class="btn btn-primary px-4">
+      <i class="fas fa-filter me-2"></i> Tampilkan
+    </button>
   </div>
+
 </form>
 
 <div class="row mb-4">
@@ -124,9 +143,7 @@
     },
     options: { responsive: true, scales: { y: { beginAtZero: true } } }
   });
-
-  // Pie Chart: distribusi nama_motif per bulan
-  const pieLabels = {{ distribusi_warna | map(attribute = 'nama_motif') | list | tojson }};
+  const pieLabels = {{ distribusi_warna | map(attribute = 'warna') | list | tojson }};
   const pieData = {{ distribusi_warna | map(attribute = 'jumlah') | list | tojson }};
 
   const pieColors = [
@@ -143,7 +160,7 @@
     data: {
       labels: pieLabels,
       datasets: [{
-        label: 'Distribusi Motif',
+        label: 'Distribusi Warna',
         data: pieData,
         backgroundColor: pieColors,
         borderColor: '#fff',
@@ -151,6 +168,10 @@
       }]
     },
     options: { responsive: true }
+  });
+  // Enable/disable dropdown bulan sesuai checkbox filter_bulan
+  document.getElementById('filter_bulan').addEventListener('change', function () {
+    document.getElementById('bulan').disabled = !this.checked;
   });
 </script>
 

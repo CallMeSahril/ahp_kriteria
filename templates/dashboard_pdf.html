@@ -38,6 +38,7 @@
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+            font-size: 11pt;
         }
 
         th,
@@ -88,7 +89,7 @@
         </tr>
         <tr>
             <th>Skor Rata-rata Tertinggi</th>
-            <td>{{ rata_rata_tertinggi.nama_motif }} ({{ rata_rata_tertinggi.rata_rata | round(2) }})</td>
+            <td>{{ rata_rata_tertinggi.nama_motif }} ({{ rata_rata_tertinggi.rata_rata | round(4) }})</td>
         </tr>
         <tr>
             <th>Waktu Upload Terakhir</th>
@@ -110,7 +111,7 @@
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>{{ item.nama_motif }}</td>
-                <td>{{ item.skor_total }}</td>
+                <td>{{ (item.skor_rata_rata if item.skor_rata_rata is defined else item.skor_total) | round(4) }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -128,24 +129,24 @@
             {% for item in penjualan_per_bulan %}
             <tr>
                 <td>{{ item.bulan }}</td>
-                <td>{{ item.rata_rata_skor | round(2) }}</td>
+                <td>{{ item.rata_rata_skor | round(4) }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    <h3>Distribusi Motif per Bulan (Pie Chart Data)</h3>
+    <h3>Distribusi Warna per Bulan (Pie Chart Data)</h3>
     <table>
         <thead>
             <tr>
-                <th>Nama Motif</th>
+                <th>Warna</th>
                 <th>Jumlah</th>
             </tr>
         </thead>
         <tbody>
             {% for item in distribusi_warna %}
             <tr>
-                <td>{{ item.nama_motif }}</td>
+                <td>{{ item.warna }}</td>
                 <td>{{ item.jumlah }}</td>
             </tr>
             {% endfor %}
